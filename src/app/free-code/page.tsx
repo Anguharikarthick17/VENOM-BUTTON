@@ -5,91 +5,12 @@ import Link from "next/link";
 import {
   FREE_CODE_RESOURCES,
   FreeCodeResource,
-  isValidGitHubUrl,
   normalizeReelNumberQuery,
 } from "@/data/freeCodeResources";
+import { ReelResourceCard } from "@/components/free-code/ReelResourceCard";
 import { Search, ArrowUpRight, SearchX, ExternalLink, Film } from "lucide-react";
 import { ErrorBoundary } from "@/components/states/ErrorBoundary";
 import { SOCIAL_URLS } from "@/data/socialLinks";
-
-/**
- * Individual Numbered Reel Vault Resource Card
- * Adheres strictly to the requirement: Exactly 4 items per card:
- * 1. The exact project image supplied
- * 2. Permanent Reel number (e.g. REEL #047)
- * 3. Project title
- * 4. VIEW SOURCE ON GITHUB ↗ button
- */
-function ReelResourceCard({ resource }: { resource: FreeCodeResource }) {
-  const [imgError, setImgError] = useState<boolean>(false);
-  const isGithubValid = isValidGitHubUrl(resource.githubUrl);
-
-  return (
-    <article className="bg-[#0D0D0D] border border-[#222222] hover:border-[#444444] rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between group shadow-lg">
-      {/* 1. Exact Project Image Supplied */}
-      <div className="relative aspect-video w-full overflow-hidden bg-[#141414] border-b border-[#222222]">
-        {resource.image && !imgError ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={resource.image}
-            alt={resource.title}
-            onError={() => setImgError(true)}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-[#666666] bg-radial from-[#1A1A1A] to-[#0A0A0A]">
-            <Film className="w-8 h-8 text-[#444444] mb-2" />
-            <span className="text-[11px] font-mono tracking-wider text-[#888888] uppercase">
-              #{resource.reelNumber.replace(/^#/, "")} PREVIEW
-            </span>
-          </div>
-        )}
-      </div>
-
-      {/* Body Area */}
-      <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
-        <div className="space-y-3">
-          {/* 2. Permanent Reel Number */}
-          <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#141414] border border-[#2A2A2A] text-xs font-mono font-bold text-[#22D3EE] tracking-widest uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-              <span>#{resource.reelNumber.replace(/^#/, "")}</span>
-            </span>
-          </div>
-
-          {/* 3. Project Title */}
-          <h2 className="text-lg sm:text-xl font-bold font-display uppercase tracking-tight text-white group-hover:text-white transition-colors leading-snug">
-            {resource.title}
-          </h2>
-        </div>
-
-        {/* 4. VIEW SOURCE ON GITHUB ↗ Button */}
-        <div className="pt-4 border-t border-[#1C1C1C]">
-          {isGithubValid ? (
-            <a
-              href={resource.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-white text-[#050505] hover:bg-[#F5F5F5] font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(255,255,255,0.12)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#050505]"
-              title={`View repository for #${resource.reelNumber.replace(/^#/, "")} on GitHub`}
-            >
-              <span>VIEW SOURCE ON GITHUB</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#050505]" />
-            </a>
-          ) : (
-            <span
-              className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#141414] text-[#777777] font-mono font-bold text-xs uppercase tracking-wider rounded-xl border border-[#222222] select-none"
-              title="Repository link pending publication"
-            >
-              <span>REPOSITORY PENDING</span>
-            </span>
-          )}
-        </div>
-      </div>
-    </article>
-  );
-}
 
 export default function FreeCodePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -104,6 +25,7 @@ export default function FreeCodePage() {
     const exactReelMatches: FreeCodeResource[] = [];
     const partialReelMatches: FreeCodeResource[] = [];
     const titleMatches: { resource: FreeCodeResource; score: number }[] = [];
+    const keywordMatches: { resource: FreeCodeResource; score: number }[] = [];
 
     for (const res of FREE_CODE_RESOURCES) {
       const resClean = res.reelNumber.replace(/^#/, "").trim();
@@ -111,7 +33,7 @@ export default function FreeCodePage() {
       const resLower = resClean.toLowerCase();
       const titleLower = res.title.toLowerCase();
 
-      // Exact number matching: supports "1", "001", "#1", "REEL #1", "reel 1", "reel #1"
+      // 1. Exact Reel number matching (supports "1", "001", "#1", "REEL #1", "reel 1", "reel #1")
       const isExactReelMatch =
         resClean === norm.rawDigits ||
         (norm.intVal !== null && !isNaN(norm.intVal) && resInt === norm.intVal) ||
@@ -125,7 +47,7 @@ export default function FreeCodePage() {
         continue;
       }
 
-      // Partial Reel number match (e.g. searching "1" matches "10" or "11", but at lower priority than exact "1")
+      // 2. Partial Reel number match (e.g. searching "1" also finds "10" or "11", but prioritized after #1)
       const isPartialReelMatch =
         norm.isNumericQuery &&
         norm.rawDigits.length > 0 &&
@@ -136,18 +58,37 @@ export default function FreeCodePage() {
         continue;
       }
 
-      // Title matching with relevance ranking (prefix matches score higher)
+      // 3. Title matching with relevance ranking
       if (titleLower.includes(qLower)) {
-        const score = titleLower.startsWith(qLower) ? 2 : 1;
+        const score = titleLower.startsWith(qLower) ? 3 : 2;
         titleMatches.push({ resource: res, score });
+        continue;
+      }
+
+      // 4. Technology, feature, or description keyword matching
+      const matchesTech = res.technologies?.some((t) =>
+        t.toLowerCase().includes(qLower)
+      );
+      const matchesFeature = res.features?.some((f) =>
+        f.toLowerCase().includes(qLower)
+      );
+      const matchesDesc =
+        res.shortDescription?.toLowerCase().includes(qLower) ||
+        res.description?.toLowerCase().includes(qLower);
+
+      if (matchesTech || matchesFeature || matchesDesc) {
+        keywordMatches.push({ resource: res, score: 1 });
       }
     }
 
     titleMatches.sort((a, b) => b.score - a.score);
+    keywordMatches.sort((a, b) => b.score - a.score);
+
     return [
       ...exactReelMatches,
       ...partialReelMatches,
       ...titleMatches.map((m) => m.resource),
+      ...keywordMatches.map((m) => m.resource),
     ];
   }, [searchQuery]);
 

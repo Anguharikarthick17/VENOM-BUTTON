@@ -5,10 +5,10 @@ import { Metadata } from "next";
 import {
   FREE_CODE_RESOURCES,
   FreeCodeResource,
-  isValidGitHubUrl,
 } from "@/data/freeCodeResources";
+import { ReelResourceCard } from "@/components/free-code/ReelResourceCard";
 import { SOCIAL_URLS } from "@/data/socialLinks";
-import { ArrowLeft, ArrowUpRight, Film, ExternalLink } from "lucide-react";
+import { ArrowLeft, ExternalLink } from "lucide-react";
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -57,8 +57,6 @@ export default async function FreeCodeDetailPage({ params }: PageProps) {
     notFound();
   }
 
-  const isGithubValid = isValidGitHubUrl(resource.githubUrl);
-
   return (
     <div className="min-h-screen bg-[#050505] text-white">
       <main className="pt-12 sm:pt-16 pb-24">
@@ -92,57 +90,9 @@ export default async function FreeCodeDetailPage({ params }: PageProps) {
             </h1>
           </div>
 
-          {/* Main Resource Card Showcase (4 items strictly) */}
-          <div className="bg-[#0D0D0D] border border-[#222222] rounded-2xl overflow-hidden max-w-3xl space-y-6">
-            {/* 1. Exact Project Image */}
-            <div className="relative aspect-video w-full overflow-hidden bg-[#141414] border-b border-[#222222]">
-              {resource.image ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={resource.image}
-                  alt={resource.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-[#666666] bg-radial from-[#1A1A1A] to-[#0A0A0A]">
-                  <Film className="w-12 h-12 text-[#444444] mb-3" />
-                  <span className="text-xs font-mono tracking-wider text-[#888888] uppercase">
-                    REEL #{resource.reelNumber} PREVIEW
-                  </span>
-                </div>
-              )}
-            </div>
-
-            <div className="p-6 sm:p-8 space-y-6">
-              {/* 2. Permanent Reel Number & 3. Title */}
-              <div className="space-y-2">
-                <span className="text-xs font-mono text-[#22D3EE] font-bold uppercase tracking-wider">
-                  #{resource.reelNumber.replace(/^#/, "")}
-                </span>
-                <h2 className="text-2xl font-bold uppercase font-display text-white">
-                  {resource.title}
-                </h2>
-              </div>
-
-              {/* 4. VIEW SOURCE ON GITHUB ↗ Button */}
-              <div className="pt-4 border-t border-[#1C1C1C]">
-                {isGithubValid ? (
-                  <a
-                    href={resource.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-white text-[#050505] hover:bg-[#F5F5F5] font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.15)] cursor-pointer"
-                  >
-                    <span>VIEW SOURCE ON GITHUB</span>
-                    <ArrowUpRight className="w-4 h-4 text-[#050505]" />
-                  </a>
-                ) : (
-                  <span className="inline-flex items-center justify-center gap-2 px-5 py-3 bg-[#141414] text-[#777777] font-mono font-bold text-xs uppercase tracking-wider rounded-xl border border-[#222222]">
-                    <span>REPOSITORY PENDING PUBLICATION</span>
-                  </span>
-                )}
-              </div>
-            </div>
+          {/* Main Resource Card Showcase */}
+          <div className="max-w-2xl">
+            <ReelResourceCard resource={resource} />
           </div>
 
           {/* Return CTA */}

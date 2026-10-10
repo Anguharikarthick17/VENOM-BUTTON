@@ -1,78 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { ArrowUpRight, Film, ExternalLink } from "lucide-react";
+import { ArrowUpRight, ExternalLink } from "lucide-react";
 import {
   FREE_CODE_RESOURCES,
-  FreeCodeResource,
-  isValidGitHubUrl,
 } from "@/data/freeCodeResources";
+import { ReelResourceCard } from "@/components/free-code/ReelResourceCard";
 import { SOCIAL_URLS } from "@/data/socialLinks";
-
-function ReelCard({ resource }: { resource: FreeCodeResource }) {
-  const [imgError, setImgError] = useState<boolean>(false);
-  const isGithubValid = isValidGitHubUrl(resource.githubUrl);
-
-  return (
-    <article className="bg-[#0D0D0D] border border-[#222222] hover:border-[#444444] rounded-2xl overflow-hidden transition-all duration-300 flex flex-col justify-between group shadow-lg">
-      {/* 1. Exact Project Image */}
-      <div className="relative aspect-video w-full overflow-hidden bg-[#141414] border-b border-[#222222]">
-        {resource.image && !imgError ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={resource.image}
-            alt={resource.title}
-            onError={() => setImgError(true)}
-            loading="lazy"
-            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-        ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-[#666666] bg-radial from-[#1A1A1A] to-[#0A0A0A]">
-            <Film className="w-8 h-8 text-[#444444] mb-2" />
-            <span className="text-[11px] font-mono tracking-wider text-[#888888] uppercase">
-              #{resource.reelNumber.replace(/^#/, "")} PREVIEW
-            </span>
-          </div>
-        )}
-      </div>
-
-      <div className="p-6 flex-1 flex flex-col justify-between space-y-6">
-        <div className="space-y-3">
-          {/* 2. Permanent Reel Number */}
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#141414] border border-[#2A2A2A] text-xs font-mono font-bold text-[#22D3EE] tracking-widest uppercase">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-            <span>#{resource.reelNumber.replace(/^#/, "")}</span>
-          </span>
-
-          {/* 3. Project Title */}
-          <h3 className="text-lg sm:text-xl font-bold font-display uppercase tracking-tight text-white group-hover:text-white transition-colors leading-snug">
-            {resource.title}
-          </h3>
-        </div>
-
-        {/* 4. VIEW SOURCE ON GITHUB ↗ */}
-        <div className="pt-4 border-t border-[#1C1C1C]">
-          {isGithubValid ? (
-            <a
-              href={resource.githubUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-white text-[#050505] hover:bg-[#F5F5F5] font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(255,255,255,0.12)] cursor-pointer"
-            >
-              <span>VIEW SOURCE ON GITHUB</span>
-              <ArrowUpRight className="w-3.5 h-3.5 text-[#050505]" />
-            </a>
-          ) : (
-            <span className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-[#141414] text-[#777777] font-mono font-bold text-xs uppercase tracking-wider rounded-xl border border-[#222222]">
-              <span>REPOSITORY PENDING</span>
-            </span>
-          )}
-        </div>
-      </div>
-    </article>
-  );
-}
 
 export function FreeCodeSection() {
   const featuredResources = FREE_CODE_RESOURCES.slice(0, 3);
@@ -122,7 +57,7 @@ export function FreeCodeSection() {
         {hasItems ? (
           <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {featuredResources.map((res) => (
-              <ReelCard key={res.reelNumber} resource={res} />
+              <ReelResourceCard key={res.reelNumber} resource={res} />
             ))}
           </div>
         ) : (

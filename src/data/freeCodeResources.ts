@@ -1,8 +1,12 @@
 export interface FreeCodeResource {
-  reelNumber: string; // Permanent string identifier preserving leading zeros (e.g. "001", "047")
+  reelNumber: string; // Permanent string identifier preserving leading zeros (e.g. "1", "001", "047")
   title: string;      // The actual project title
   image: string;      // The exact supplied local image path or URL
   githubUrl: string;  // The actual GitHub repository URL
+  shortDescription?: string; // Concise summary for card display
+  description?: string;      // Full verified description
+  technologies?: string[];   // Confirmed technology stack
+  features?: string[];       // Confirmed key features
 }
 
 /**
@@ -83,9 +87,25 @@ export function normalizeReelNumberQuery(query: string): {
 export const FREE_CODE_RESOURCES: FreeCodeResource[] = [
   {
     reelNumber: "1",
-    title: "Login Page",
+    title: "GENZLOG Login Page",
     image: "/projects/login-page/screenshot.png",
     githubUrl: "https://github.com/Anguharikarthick17/LOGIN-PAGE---1",
+    shortDescription:
+      "Premium monochrome authentication experience with an interactive 3D chrome sculpture, responsive animations, and accessible form validation.",
+    description:
+      "GENZLOG Login Page is a premium monochrome authentication interface featuring an interactive 3D chrome sculpture and responsive animations. Built with React, TypeScript, Three.js, and Tailwind CSS, it combines modern design with accessible form validation and smooth interactions.",
+    technologies: [
+      "React",
+      "TypeScript",
+      "Three.js",
+      "Tailwind CSS",
+    ],
+    features: [
+      "Interactive 3D chrome sculpture",
+      "Responsive animations",
+      "Accessible form validation",
+      "Smooth user interactions",
+    ],
   },
 ];
 
