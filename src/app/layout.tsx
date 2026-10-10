@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { SpaceWarpBackground } from "@/components/SpaceWarpBackground";
 import { WelcomeIntro } from "@/components/WelcomeIntro";
 import { OfflineBanner } from "@/components/states/OfflineBanner";
+import { DynamicTabTitle } from "@/components/DynamicTabTitle";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -71,9 +72,16 @@ export const metadata: Metadata = {
     images: ["/genzlog-logo-white.png"],
   },
   icons: {
-    icon: "/genzlog-logo-white.png",
-    shortcut: "/genzlog-logo-white.png",
-    apple: "/genzlog-logo-white.png",
+    icon: [
+      { url: "/favicon-white.ico?v=4", sizes: "any" },
+      { url: "/favicon-white-32x32.png?v=4", type: "image/png", sizes: "32x32" },
+      { url: "/favicon-white-48x48.png?v=4", type: "image/png", sizes: "48x48" },
+      { url: "/favicon-white-192x192.png?v=4", type: "image/png", sizes: "192x192" },
+    ],
+    shortcut: "/favicon-white.ico?v=4",
+    apple: [
+      { url: "/favicon-white-192x192.png?v=4", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
@@ -111,6 +119,9 @@ export default function RootLayout({
 
         {/* Global Continuous Monochrome Space Warp Background */}
         <SpaceWarpBackground />
+
+        {/* Dynamic Browser Tab Title Manager */}
+        <DynamicTabTitle />
 
         {/* Global Network Connectivity Banner */}
         <OfflineBanner />
