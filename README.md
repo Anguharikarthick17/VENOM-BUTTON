@@ -1,36 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GenZLog
+
+> The Digital Log of Gen Z — Modern Web Development & Numbered Free Code Vault
+
+GENZLOG builds websites and digital experiences for businesses across 12 digital service categories, while sharing useful frontend code and open-source resources for developers and creators.
+
+## Features
+
+- **12 Curated Service Categories:** From personal celebration pages to advanced web apps, e-commerce, and live tracking systems.
+- **Custom Solutions Engine:** Tailored AI solutions, customized authentication UI, and bespoke web apps with integrated contact prefill.
+- **Numbered Free Code Vault:** Instagram Reel source code archive indexed by permanent Reel numbers (e.g. `REEL #047`) linking to verified GitHub repositories.
+- **Space Warp Dark Aesthetic:** Monochrome dark identity (`#050505`) with controlled neon typography accents.
+- **Project Brief & Estimation Generator:** In-browser PDF generation and WhatsApp enquiry handoff.
+
+## Tech Stack
+
+- **Framework:** Next.js 16 (Turbopack, App Router)
+- **UI & Styling:** React 19, Tailwind CSS, Vanilla CSS design tokens
+- **Animations:** Framer Motion, Canvas 3D Space Warp
+- **Utilities:** jsPDF, Lucide React
 
 ## Getting Started
 
-First, run the development server:
+First, install dependencies and run the development server:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to explore the website.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Official Social Channels
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **Instagram:** [https://www.instagram.com/genzlog.in/?hl=en](https://www.instagram.com/genzlog.in/?hl=en)
+- **YouTube:** [https://www.youtube.com/@genzlog17](https://www.youtube.com/@genzlog17)
+- **LinkedIn:** [https://www.linkedin.com/in/angu-hari-karthick-m-175753374/](https://www.linkedin.com/in/angu-hari-karthick-m-175753374/)
+- **X (Twitter):** [https://x.com/home](https://x.com/home)
+- **Facebook:** [https://www.facebook.com/](https://www.facebook.com/)
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© 2026 GENZLOG. All rights reserved.
