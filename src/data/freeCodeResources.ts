@@ -81,7 +81,12 @@ export function normalizeReelNumberQuery(query: string): {
  * Add each resource manually as Instagram Reels are published.
  */
 export const FREE_CODE_RESOURCES: FreeCodeResource[] = [
-  // Real Reel entries will be added here upon publication (e.g. { reelNumber: "001", title: "...", image: "...", githubUrl: "..." })
+  {
+    reelNumber: "1",
+    title: "Login Page",
+    image: "/projects/login-page/screenshot.png",
+    githubUrl: "https://github.com/Anguharikarthick17/LOGIN-PAGE---1",
+  },
 ];
 
 // Run integrity check in development

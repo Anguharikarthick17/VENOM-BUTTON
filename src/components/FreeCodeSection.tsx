@@ -31,7 +31,7 @@ function ReelCard({ resource }: { resource: FreeCodeResource }) {
           <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-[#666666] bg-radial from-[#1A1A1A] to-[#0A0A0A]">
             <Film className="w-8 h-8 text-[#444444] mb-2" />
             <span className="text-[11px] font-mono tracking-wider text-[#888888] uppercase">
-              REEL #{resource.reelNumber} PREVIEW
+              #{resource.reelNumber.replace(/^#/, "")} PREVIEW
             </span>
           </div>
         )}
@@ -42,7 +42,7 @@ function ReelCard({ resource }: { resource: FreeCodeResource }) {
           {/* 2. Permanent Reel Number */}
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#141414] border border-[#2A2A2A] text-xs font-mono font-bold text-[#22D3EE] tracking-widest uppercase">
             <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-            <span>REEL #{resource.reelNumber}</span>
+            <span>#{resource.reelNumber.replace(/^#/, "")}</span>
           </span>
 
           {/* 3. Project Title */}

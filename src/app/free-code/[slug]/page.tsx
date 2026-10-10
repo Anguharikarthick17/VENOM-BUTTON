@@ -22,11 +22,12 @@ export async function generateStaticParams() {
 }
 
 function findReel(slug: string): FreeCodeResource | undefined {
-  const normalized = slug.toLowerCase().replace(/^reel-?/, "").trim();
+  const decoded = decodeURIComponent(slug);
+  const normalized = decoded.toLowerCase().replace(/^reel-?/, "").replace(/^#/, "").trim();
   return FREE_CODE_RESOURCES.find(
     (r) =>
-      r.reelNumber.toLowerCase() === normalized ||
-      r.reelNumber.toLowerCase() === slug.toLowerCase()
+      r.reelNumber.toLowerCase().replace(/^#/, "").trim() === normalized ||
+      r.reelNumber.toLowerCase() === decoded.toLowerCase()
   );
 }
 
@@ -73,7 +74,7 @@ export default async function FreeCodeDetailPage({ params }: PageProps) {
             </Link>
 
             <span className="text-[#888888] font-bold">
-              REEL #{resource.reelNumber}
+              #{resource.reelNumber.replace(/^#/, "")}
             </span>
           </div>
 
@@ -82,7 +83,7 @@ export default async function FreeCodeDetailPage({ params }: PageProps) {
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#141414] border border-[#2A2A2A] text-xs font-mono font-bold text-[#22D3EE] tracking-widest uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-                <span>REEL #{resource.reelNumber}</span>
+                <span>#{resource.reelNumber.replace(/^#/, "")}</span>
               </span>
             </div>
 
@@ -116,7 +117,7 @@ export default async function FreeCodeDetailPage({ params }: PageProps) {
               {/* 2. Permanent Reel Number & 3. Title */}
               <div className="space-y-2">
                 <span className="text-xs font-mono text-[#22D3EE] font-bold uppercase tracking-wider">
-                  INSTAGRAM REEL #{resource.reelNumber}
+                  #{resource.reelNumber.replace(/^#/, "")}
                 </span>
                 <h2 className="text-2xl font-bold uppercase font-display text-white">
                   {resource.title}

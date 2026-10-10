@@ -41,7 +41,7 @@ function ReelResourceCard({ resource }: { resource: FreeCodeResource }) {
           <div className="w-full h-full flex flex-col items-center justify-center p-6 text-center text-[#666666] bg-radial from-[#1A1A1A] to-[#0A0A0A]">
             <Film className="w-8 h-8 text-[#444444] mb-2" />
             <span className="text-[11px] font-mono tracking-wider text-[#888888] uppercase">
-              REEL #{resource.reelNumber} PREVIEW
+              #{resource.reelNumber.replace(/^#/, "")} PREVIEW
             </span>
           </div>
         )}
@@ -54,7 +54,7 @@ function ReelResourceCard({ resource }: { resource: FreeCodeResource }) {
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#141414] border border-[#2A2A2A] text-xs font-mono font-bold text-[#22D3EE] tracking-widest uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-              <span>REEL #{resource.reelNumber}</span>
+              <span>#{resource.reelNumber.replace(/^#/, "")}</span>
             </span>
           </div>
 
@@ -72,7 +72,7 @@ function ReelResourceCard({ resource }: { resource: FreeCodeResource }) {
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center justify-center gap-2 w-full py-3 px-4 bg-white text-[#050505] hover:bg-[#F5F5F5] font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition-all shadow-[0_0_15px_rgba(255,255,255,0.12)] cursor-pointer focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-[#050505]"
-              title={`View repository for Reel #${resource.reelNumber} on GitHub`}
+              title={`View repository for #${resource.reelNumber.replace(/^#/, "")} on GitHub`}
             >
               <span>VIEW SOURCE ON GITHUB</span>
               <ArrowUpRight className="w-3.5 h-3.5 text-[#050505]" />
@@ -102,24 +102,37 @@ export default function FreeCodePage() {
     const qLower = q.toLowerCase();
 
     const exactReelMatches: FreeCodeResource[] = [];
+    const partialReelMatches: FreeCodeResource[] = [];
     const titleMatches: { resource: FreeCodeResource; score: number }[] = [];
 
     for (const res of FREE_CODE_RESOURCES) {
-      const resInt = parseInt(res.reelNumber, 10);
-      const resLower = res.reelNumber.toLowerCase();
+      const resClean = res.reelNumber.replace(/^#/, "").trim();
+      const resInt = parseInt(resClean, 10);
+      const resLower = resClean.toLowerCase();
       const titleLower = res.title.toLowerCase();
 
-      // Number matching: supports "047", "47", "REEL #047", "reel 047", "reel #47"
-      const isReelMatch =
-        res.reelNumber === norm.rawDigits ||
+      // Exact number matching: supports "1", "001", "#1", "REEL #1", "reel 1", "reel #1"
+      const isExactReelMatch =
+        resClean === norm.rawDigits ||
         (norm.intVal !== null && !isNaN(norm.intVal) && resInt === norm.intVal) ||
         resLower === norm.rawDigits ||
         `reel #${resLower}` === qLower ||
         `reel ${resLower}` === qLower ||
         `#${resLower}` === qLower;
 
-      if (isReelMatch) {
+      if (isExactReelMatch) {
         exactReelMatches.push(res);
+        continue;
+      }
+
+      // Partial Reel number match (e.g. searching "1" matches "10" or "11", but at lower priority than exact "1")
+      const isPartialReelMatch =
+        norm.isNumericQuery &&
+        norm.rawDigits.length > 0 &&
+        resClean.includes(norm.rawDigits);
+
+      if (isPartialReelMatch) {
+        partialReelMatches.push(res);
         continue;
       }
 
@@ -131,7 +144,11 @@ export default function FreeCodePage() {
     }
 
     titleMatches.sort((a, b) => b.score - a.score);
-    return [...exactReelMatches, ...titleMatches.map((m) => m.resource)];
+    return [
+      ...exactReelMatches,
+      ...partialReelMatches,
+      ...titleMatches.map((m) => m.resource),
+    ];
   }, [searchQuery]);
 
   const hasCatalogItems = FREE_CODE_RESOURCES.length > 0;
