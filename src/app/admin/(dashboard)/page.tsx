@@ -12,6 +12,8 @@ import {
   Layers,
 } from "lucide-react";
 
+export const instant = false;
+
 export default async function AdminDashboardOverviewPage() {
   const projects = await getAllAdminProjects();
 

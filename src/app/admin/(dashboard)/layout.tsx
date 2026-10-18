@@ -4,6 +4,8 @@ import { getAdminSession, isSupabaseConfigured } from "@/lib/supabase/auth";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { PermissionDeniedState } from "@/components/states/PermissionDeniedState";
 
+export const instant = false;
+
 export default async function AdminDashboardLayout({
   children,
 }: {

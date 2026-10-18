@@ -30,6 +30,8 @@ const caveat = Caveat({
   weight: ["400", "600", "700"],
 });
 
+export const instant = false;
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://genzlog.com"),
   title: "GENZLOG — Website Development & Free Frontend Code Platform",

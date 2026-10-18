@@ -1,6 +1,6 @@
 import { revalidatePath } from "next/cache";
 import { createAdminClient } from "./supabase/admin";
-import { createServerSupabaseClient } from "./supabase/server";
+import { createPublicServerClient } from "./supabase/server";
 import { isSupabaseConfigured } from "./supabase/auth";
 import { FreeCodeResource, isValidGitHubUrl } from "@/data/freeCodeResources";
 
@@ -200,7 +200,7 @@ export async function getPublishedProjects(): Promise<FreeCodeResource[]> {
   }
 
   try {
-    const supabase = await createServerSupabaseClient();
+    const supabase = createPublicServerClient();
     const { data, error } = await supabase
       .from("free_code_projects")
       .select("*")
@@ -255,7 +255,7 @@ export async function getPublishedProjectBySlugOrReel(
   }
 
   try {
-    const supabase = await createServerSupabaseClient();
+    const supabase = createPublicServerClient();
     let query = supabase
       .from("free_code_projects")
       .select("*")

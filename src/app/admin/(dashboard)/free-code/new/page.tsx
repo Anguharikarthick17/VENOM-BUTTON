@@ -2,6 +2,8 @@ import React from "react";
 import { getAllAdminProjects } from "@/lib/freeCodeDb";
 import { ProjectEditorForm } from "@/components/admin/ProjectEditorForm";
 
+export const instant = false;
+
 export default async function AdminNewProjectPage() {
   const existingProjects = await getAllAdminProjects();
   const existingReelNumbers = existingProjects.map((p) => p.reel_number);

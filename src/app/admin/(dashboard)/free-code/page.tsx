@@ -4,6 +4,8 @@ import { FreeCodeProjectManager } from "@/components/admin/FreeCodeProjectManage
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
 
+export const instant = false;
+
 export default async function AdminFreeCodeListPage() {
   const projects = await getAllAdminProjects();
 
