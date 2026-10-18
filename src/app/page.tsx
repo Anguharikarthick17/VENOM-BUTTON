@@ -6,6 +6,7 @@ import { Services } from "@/components/Services";
 import { BrandPhilosophy } from "@/components/BrandPhilosophy";
 import { Process } from "@/components/Process";
 import { FreeCodeSection } from "@/components/FreeCodeSection";
+import { getPublishedProjects } from "@/lib/freeCodeDb";
 import { ShiningButton } from "@/components/ui/ShiningButton";
 import { SECURITY_PILLARS } from "@/data/services";
 import { ErrorBoundary } from "@/components/states/ErrorBoundary";
@@ -18,7 +19,8 @@ import {
   MessageSquare,
 } from "lucide-react";
 
-export default function Home() {
+export default async function Home() {
+  const publishedProjects = await getPublishedProjects();
   return (
     <div className="relative w-full text-white bg-[#050505]">
       {/* 1. APPROVED HOMEPAGE HERO (Strictly Preserved) */}
@@ -167,7 +169,7 @@ export default function Home() {
         title="Open Source Library Preview Unavailable"
         message="An issue occurred displaying featured code components. You can browse the full library on the dedicated Free Code page."
       >
-        <FreeCodeSection />
+        <FreeCodeSection resources={publishedProjects} />
       </ErrorBoundary>
 
       {/* 8. Official GENZLOG Direct Contact & Commission Desk */}

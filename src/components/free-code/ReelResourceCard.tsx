@@ -12,6 +12,7 @@ import {
   X,
   Info,
   Check,
+  ExternalLink,
 } from "lucide-react";
 
 interface ReelResourceCardProps {
@@ -293,6 +294,18 @@ function ProjectDetailsModal({
             Close
           </button>
 
+          {resource.liveDemoUrl && (
+            <a
+              href={resource.liveDemoUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 py-3 px-5 bg-[#1C1C1C] hover:bg-[#252525] text-white border border-[#303030] hover:border-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl transition-all cursor-pointer"
+            >
+              <span>LIVE DEMO</span>
+              <ExternalLink className="w-3.5 h-3.5 text-white" />
+            </a>
+          )}
+
           {isGithubValid && (
             <a
               href={resource.githubUrl}
@@ -460,6 +473,19 @@ export function ReelResourceCard({ resource }: ReelResourceCardProps) {
               <Info className="w-3.5 h-3.5 text-[#A3A3A3]" />
               <span>DETAILS</span>
             </button>
+
+            {resource.liveDemoUrl && (
+              <a
+                href={resource.liveDemoUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-1.5 py-3 px-3 bg-[#161616] hover:bg-[#222222] text-white font-mono font-bold text-xs uppercase tracking-wider rounded-xl border border-[#2B2B2B] hover:border-white transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-white"
+                title={`Open live demo for #${reelNumber}`}
+              >
+                <span>DEMO</span>
+                <ExternalLink className="w-3.5 h-3.5 text-[#A3A3A3]" />
+              </a>
+            )}
 
             {isGithubValid ? (
               <a

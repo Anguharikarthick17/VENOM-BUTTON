@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
-import { FREE_CODE_RESOURCES } from "@/data/freeCode";
+import { getPublishedProjects } from "@/lib/freeCodeDb";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = "https://genzlog.com";
 
   const staticPages = [
@@ -43,8 +43,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
-  const resourcePages = FREE_CODE_RESOURCES.map((res) => ({
-    url: `${baseUrl}/free-code/${res.slug}`,
+  let publishedProjects: { slug?: string; reelNumber: string }[] = [];
+  try {
+    publishedProjects = await getPublishedProjects();
+  } catch {
+    publishedProjects = [];
+  }
+
+  const resourcePages = publishedProjects.map((res) => ({
+    url: `${baseUrl}/free-code/${res.slug || res.reelNumber}`,
     lastModified: new Date(),
     changeFrequency: "weekly" as const,
     priority: 0.7,

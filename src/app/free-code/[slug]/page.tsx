@@ -2,10 +2,7 @@ import React from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { Metadata } from "next";
-import {
-  FREE_CODE_RESOURCES,
-  FreeCodeResource,
-} from "@/data/freeCodeResources";
+import { getPublishedProjectBySlugOrReel, getPublishedProjects } from "@/lib/freeCodeDb";
 import { ReelResourceCard } from "@/components/free-code/ReelResourceCard";
 import { SOCIAL_URLS } from "@/data/socialLinks";
 import { ArrowLeft, ExternalLink } from "lucide-react";
@@ -15,25 +12,27 @@ interface PageProps {
 }
 
 export async function generateStaticParams() {
-  if (FREE_CODE_RESOURCES.length === 0) {
-    return [{ slug: "000" }];
+  try {
+    const projects = await getPublishedProjects();
+    if (!projects || projects.length === 0) {
+      return [{ slug: "1" }];
+    }
+    const paramsList: { slug: string }[] = [];
+    for (const p of projects) {
+      paramsList.push({ slug: p.reelNumber });
+      if (p.slug && p.slug !== p.reelNumber) {
+        paramsList.push({ slug: p.slug });
+      }
+    }
+    return paramsList;
+  } catch {
+    return [{ slug: "1" }];
   }
-  return FREE_CODE_RESOURCES.map((r) => ({ slug: r.reelNumber }));
-}
-
-function findReel(slug: string): FreeCodeResource | undefined {
-  const decoded = decodeURIComponent(slug);
-  const normalized = decoded.toLowerCase().replace(/^reel-?/, "").replace(/^#/, "").trim();
-  return FREE_CODE_RESOURCES.find(
-    (r) =>
-      r.reelNumber.toLowerCase().replace(/^#/, "").trim() === normalized ||
-      r.reelNumber.toLowerCase() === decoded.toLowerCase()
-  );
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
-  const resource = findReel(slug);
+  const resource = await getPublishedProjectBySlugOrReel(slug);
   if (!resource) {
     return { title: "Reel Project Not Found | GENZLOG Free Code Vault" };
   }
@@ -44,18 +43,21 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       title: `REEL #${resource.reelNumber} — ${resource.title}`,
       description: `Open source frontend repository for Instagram Reel #${resource.reelNumber}.`,
-      url: `https://genzlog.com/free-code/${resource.reelNumber}`,
+      url: `https://genzlog.com/free-code/${resource.slug || resource.reelNumber}`,
+      images: resource.image ? [{ url: resource.image }] : undefined,
     },
   };
 }
 
 export default async function FreeCodeDetailPage({ params }: PageProps) {
   const { slug } = await params;
-  const resource = findReel(slug);
+  const resource = await getPublishedProjectBySlugOrReel(slug);
 
   if (!resource) {
     notFound();
   }
+
+  const cleanReel = resource.reelNumber.replace(/^#/, "");
 
   return (
     <div className="min-h-screen bg-[#050505] text-white">
@@ -72,7 +74,7 @@ export default async function FreeCodeDetailPage({ params }: PageProps) {
             </Link>
 
             <span className="text-[#888888] font-bold">
-              #{resource.reelNumber.replace(/^#/, "")}
+              #{cleanReel}
             </span>
           </div>
 
@@ -81,8 +83,13 @@ export default async function FreeCodeDetailPage({ params }: PageProps) {
             <div className="flex items-center gap-2">
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-[#141414] border border-[#2A2A2A] text-xs font-mono font-bold text-[#22D3EE] tracking-widest uppercase">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] animate-pulse" />
-                <span>#{resource.reelNumber.replace(/^#/, "")}</span>
+                <span>#{cleanReel}</span>
               </span>
+              {resource.category && (
+                <span className="px-2.5 py-0.5 rounded-md bg-[#161616] border border-[#282828] text-xs font-mono text-[#A3A3A3]">
+                  {resource.category}
+                </span>
+              )}
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-bold uppercase tracking-tight text-white font-display leading-[1.05]">

@@ -1,12 +1,17 @@
 export interface FreeCodeResource {
+  id?: string;
   reelNumber: string; // Permanent string identifier preserving leading zeros (e.g. "1", "001", "047")
+  slug?: string;      // URL slug identifier
   title: string;      // The actual project title
   image: string;      // The exact supplied local image path or URL
   githubUrl: string;  // The actual GitHub repository URL
+  liveDemoUrl?: string; // Optional live preview / interactive demo URL
   shortDescription?: string; // Concise summary for card display
   description?: string;      // Full verified description
   technologies?: string[];   // Confirmed technology stack
   features?: string[];       // Confirmed key features
+  category?: string;         // Category classification
+  status?: "draft" | "published"; // Publication status
 }
 
 /**
@@ -80,13 +85,13 @@ export function normalizeReelNumberQuery(query: string): {
 }
 
 /**
- * Instagram Reel Source Code Vault Catalogue.
- * Starts empty until real project reels are published.
- * Add each resource manually as Instagram Reels are published.
+ * Baseline Project Catalog (Fallbacks for local dev before database population)
  */
 export const FREE_CODE_RESOURCES: FreeCodeResource[] = [
   {
+    id: "seed-project-001",
     reelNumber: "1",
+    slug: "login-page",
     title: "GENZLOG Login Page",
     image: "/projects/login-page/screenshot.png",
     githubUrl: "https://github.com/Anguharikarthick17/LOGIN-PAGE---1",
@@ -106,6 +111,34 @@ export const FREE_CODE_RESOURCES: FreeCodeResource[] = [
       "Accessible form validation",
       "Smooth user interactions",
     ],
+    category: "Login & Signup",
+    status: "published",
+  },
+  {
+    id: "seed-project-002",
+    reelNumber: "2",
+    slug: "creative-studio",
+    title: "Creative Studio",
+    image: "/projects/login-page/screenshot.png",
+    githubUrl: "https://github.com/Anguharikarthick17/creative-studio",
+    shortDescription:
+      "High-performance monochrome creative studio portfolio with smooth micro-animations, interactive showcase elements, and minimalist typography.",
+    description:
+      "Creative Studio is a high-performance modern agency portfolio and showcase interface featuring smooth micro-interactions, responsive grid layout, and minimalist monochrome typography. Designed for creative agencies and independent developers.",
+    technologies: [
+      "Next.js",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+    ],
+    features: [
+      "Minimalist monochrome design",
+      "Smooth micro-animations",
+      "Responsive portfolio showcase",
+      "Optimized performance",
+    ],
+    category: "Landing Page Sections",
+    status: "published",
   },
 ];
 

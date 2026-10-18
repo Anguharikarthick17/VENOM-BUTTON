@@ -5,12 +5,18 @@ import Link from "next/link";
 import { ArrowUpRight, ExternalLink } from "lucide-react";
 import {
   FREE_CODE_RESOURCES,
+  FreeCodeResource,
 } from "@/data/freeCodeResources";
 import { ReelResourceCard } from "@/components/free-code/ReelResourceCard";
 import { SOCIAL_URLS } from "@/data/socialLinks";
 
-export function FreeCodeSection() {
-  const featuredResources = FREE_CODE_RESOURCES.slice(0, 3);
+interface FreeCodeSectionProps {
+  resources?: FreeCodeResource[];
+}
+
+export function FreeCodeSection({ resources }: FreeCodeSectionProps) {
+  const items = resources && resources.length > 0 ? resources : FREE_CODE_RESOURCES;
+  const featuredResources = items.slice(0, 3);
   const hasItems = featuredResources.length > 0;
 
   return (

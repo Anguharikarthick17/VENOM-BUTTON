@@ -3,10 +3,18 @@
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { ArrowUp, ArrowUpRight } from "lucide-react";
 import { SOCIAL_LINKS } from "@/data/socialLinks";
 
 export function Footer() {
+  const pathname = usePathname();
+
+  // Suppress public footer on dedicated admin routes
+  if (pathname?.startsWith("/admin")) {
+    return null;
+  }
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
