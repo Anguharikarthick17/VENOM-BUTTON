@@ -19,6 +19,8 @@ import {
   MessageSquare,
 } from "lucide-react";
 
+export const instant = false;
+
 export default async function Home() {
   const publishedProjects = await getPublishedProjects();
   return (

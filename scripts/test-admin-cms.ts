@@ -35,7 +35,7 @@ function runTest(name: string, fn: () => void) {
 // -----------------------------------------------------------------------------
 // Test 1: Verify Projects #1 and #2 remain intact in Seed & Static Data
 // -----------------------------------------------------------------------------
-runTest("Projects #1 (Login Page) and #2 (Creative Studio) exist and are intact", () => {
+runTest("Projects #1 (Login Page) and #2 (Basketball Upload) exist and are intact", () => {
   const p1 = SEED_PROJECTS.find((p) => p.reel_number === 1);
   const p2 = SEED_PROJECTS.find((p) => p.reel_number === 2);
 
@@ -45,14 +45,16 @@ runTest("Projects #1 (Login Page) and #2 (Creative Studio) exist and are intact"
   assert.strictEqual(p1.github_url, "https://github.com/Anguharikarthick17/LOGIN-PAGE---1");
 
   assert.ok(p2, "Project #2 must exist in seed catalogue");
-  assert.strictEqual(p2.title, "Creative Studio");
+  assert.strictEqual(p2.title, "GENZLOG Basketball Upload");
   assert.strictEqual(p2.status, "published");
-  assert.strictEqual(p2.github_url, "https://github.com/Anguharikarthick17/creative-studio");
+  assert.strictEqual(p2.github_url, "https://github.com/Anguharikarthick17/-GENZLOG-Basketball");
 
   const staticP1 = FREE_CODE_RESOURCES.find((p) => p.reelNumber === "1");
   const staticP2 = FREE_CODE_RESOURCES.find((p) => p.reelNumber === "2");
   assert.ok(staticP1, "Static resource catalogue must include #1");
   assert.ok(staticP2, "Static resource catalogue must include #2");
+  assert.strictEqual(staticP2?.title, "GENZLOG Basketball Upload");
+  assert.strictEqual(staticP2?.githubUrl, "https://github.com/Anguharikarthick17/-GENZLOG-Basketball");
 });
 
 // -----------------------------------------------------------------------------
@@ -144,6 +146,68 @@ runTest("Search by '3', '#3', or 'REEL #3' resolves exact Reel #3 rather than #3
   const result30 = searchReel("#30");
   assert.strictEqual(result30.length, 1);
   assert.strictEqual(result30[0].reelNumber, "30");
+
+  // 6. Test with Reel 2, Reel 20, Reel 21
+  const dataset2: FreeCodeResource[] = [
+    {
+      reelNumber: "2",
+      title: "GENZLOG Basketball Upload",
+      image: "/projects/basketball-upload/screenshot.png",
+      githubUrl: "https://github.com/Anguharikarthick17/-GENZLOG-Basketball",
+      status: "published",
+    },
+    {
+      reelNumber: "20",
+      title: "Some Project 20",
+      image: "/test.png",
+      githubUrl: "https://github.com/test/20",
+      status: "published",
+    },
+  ];
+
+  function searchReel2(q: string) {
+    const norm = normalizeReelNumberQuery(q);
+    const qLower = q.toLowerCase();
+    const exactReelMatches: FreeCodeResource[] = [];
+    const partialReelMatches: FreeCodeResource[] = [];
+
+    for (const res of dataset2) {
+      const resClean = res.reelNumber.replace(/^#/, "").trim();
+      const resInt = parseInt(resClean, 10);
+      const resLower = resClean.toLowerCase();
+
+      const isExact =
+        resClean === norm.rawDigits ||
+        (norm.intVal !== null && !isNaN(norm.intVal) && resInt === norm.intVal) ||
+        resLower === norm.rawDigits ||
+        `reel #${resLower}` === qLower ||
+        `reel ${resLower}` === qLower ||
+        `#${resLower}` === qLower;
+
+      if (isExact) {
+        exactReelMatches.push(res);
+        continue;
+      }
+      if (norm.isNumericQuery && norm.rawDigits.length > 0 && resClean.includes(norm.rawDigits)) {
+        partialReelMatches.push(res);
+      }
+    }
+    if (exactReelMatches.length > 0) return exactReelMatches;
+    return partialReelMatches;
+  }
+
+  // Searches for 2, #2, REEL #2, reel 2 must return ONLY Reel #2, never #20
+  for (const q of ["2", "#2", "REEL #2", "reel 2", "REEL 2", "#02", "02"]) {
+    const res = searchReel2(q);
+    assert.strictEqual(res.length, 1, `Searching '${q}' must return exactly 1 result`);
+    assert.strictEqual(res[0].reelNumber, "2", `Searching '${q}' must resolve Reel #2`);
+    assert.strictEqual(res[0].title, "GENZLOG Basketball Upload");
+  }
+
+  // Searching for 20 must return ONLY Reel #20
+  const res20 = searchReel2("20");
+  assert.strictEqual(res20.length, 1);
+  assert.strictEqual(res20[0].reelNumber, "20");
 });
 
 // -----------------------------------------------------------------------------
