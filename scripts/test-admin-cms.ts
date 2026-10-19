@@ -4,6 +4,9 @@ import {
   adaptRowToResource,
   generateSlug,
   isReelNumberTaken,
+  getPublishedProjects,
+  getPublishedProjectBySlugOrReel,
+  getStaticPublishedProjects,
 } from "../src/lib/freeCodeDb";
 import {
   isValidGitHubUrl,
@@ -293,6 +296,41 @@ runTest("Admin authorization correctly verifies authorized roster", () => {
   } finally {
     process.env.ADMIN_EMAILS = prevEnv;
   }
+});
+
+// -----------------------------------------------------------------------------
+// Test 8: Public Vault Static Fallback Resilience
+// (Requirement: When Supabase is unavailable, unconfigured, or returns 0 rows,
+//  the public catalogue must safely serve both #1 and #2 without returning empty)
+// -----------------------------------------------------------------------------
+runTest("Public catalogue serves #1 and #2 from static catalog when database is empty/unconfigured", async () => {
+  const staticProjects = getStaticPublishedProjects();
+  assert.strictEqual(staticProjects.length >= 2, true, "Static catalog must contain at least 2 projects");
+  assert.ok(staticProjects.some((p) => p.reelNumber === "1" && p.title === "GENZLOG Login Page"));
+  assert.ok(staticProjects.some((p) => p.reelNumber === "2" && p.title === "GENZLOG Basketball Upload"));
+
+  const published = await getPublishedProjects();
+  assert.strictEqual(published.length >= 2, true, "getPublishedProjects must always return at least #1 and #2");
+  assert.ok(published.some((p) => p.reelNumber === "1"));
+  assert.ok(published.some((p) => p.reelNumber === "2"));
+});
+
+// -----------------------------------------------------------------------------
+// Test 9: Public Route Slug & Reel Number Resolution Fallback
+// -----------------------------------------------------------------------------
+runTest("Route resolver safely resolves both #1 and #2 by reel number and slug", async () => {
+  const p1ByReel = await getPublishedProjectBySlugOrReel("1");
+  const p1BySlug = await getPublishedProjectBySlugOrReel("login-page");
+  assert.ok(p1ByReel, "Must resolve Reel #1 by number");
+  assert.ok(p1BySlug, "Must resolve Reel #1 by slug");
+  assert.strictEqual(p1ByReel?.title, "GENZLOG Login Page");
+
+  const p2ByReel = await getPublishedProjectBySlugOrReel("2");
+  const p2BySlug = await getPublishedProjectBySlugOrReel("basketball-upload");
+  assert.ok(p2ByReel, "Must resolve Reel #2 by number");
+  assert.ok(p2BySlug, "Must resolve Reel #2 by slug");
+  assert.strictEqual(p2ByReel?.title, "GENZLOG Basketball Upload");
+  assert.strictEqual(p2ByReel?.githubUrl, "https://github.com/Anguharikarthick17/-GENZLOG-Basketball");
 });
 
 console.log("=================================================");

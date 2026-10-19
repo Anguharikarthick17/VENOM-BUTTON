@@ -2,22 +2,26 @@
 
 import React, { useState, useMemo } from "react";
 import Link from "next/link";
-import { FreeCodeResource, normalizeReelNumberQuery } from "@/data/freeCodeResources";
+import { FREE_CODE_RESOURCES, FreeCodeResource, normalizeReelNumberQuery } from "@/data/freeCodeResources";
 import { ReelResourceCard } from "@/components/free-code/ReelResourceCard";
 import { Search, ArrowUpRight, SearchX, ExternalLink, Film } from "lucide-react";
 import { ErrorBoundary } from "@/components/states/ErrorBoundary";
 import { SOCIAL_URLS } from "@/data/socialLinks";
 
 interface FreeCodeClientViewProps {
-  initialProjects: FreeCodeResource[];
+  initialProjects?: FreeCodeResource[];
 }
 
 export function FreeCodeClientView({ initialProjects }: FreeCodeClientViewProps) {
+  const projects =
+    initialProjects && initialProjects.length > 0
+      ? initialProjects
+      : FREE_CODE_RESOURCES;
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredResources = useMemo(() => {
     const q = searchQuery.trim();
-    if (!q) return initialProjects;
+    if (!q) return projects;
 
     const norm = normalizeReelNumberQuery(q);
     const qLower = q.toLowerCase();
@@ -27,7 +31,7 @@ export function FreeCodeClientView({ initialProjects }: FreeCodeClientViewProps)
     const titleMatches: { resource: FreeCodeResource; score: number }[] = [];
     const keywordMatches: { resource: FreeCodeResource; score: number }[] = [];
 
-    for (const res of initialProjects) {
+    for (const res of projects) {
       const resClean = res.reelNumber.replace(/^#/, "").trim();
       const resInt = parseInt(resClean, 10);
       const resLower = resClean.toLowerCase();
@@ -96,9 +100,9 @@ export function FreeCodeClientView({ initialProjects }: FreeCodeClientViewProps)
       ...titleMatches.map((m) => m.resource),
       ...keywordMatches.map((m) => m.resource),
     ];
-  }, [searchQuery, initialProjects]);
+  }, [searchQuery, projects]);
 
-  const hasCatalogItems = initialProjects.length > 0;
+  const hasCatalogItems = projects.length > 0;
 
   return (
     <main className="pt-12 sm:pt-16 pb-24 bg-[#050505] min-h-screen text-white">
@@ -126,7 +130,7 @@ export function FreeCodeClientView({ initialProjects }: FreeCodeClientViewProps)
           {/* Quick Counter & External Links */}
           <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
             <div className="px-4 py-2 bg-[#111111] border border-[#303030] rounded-xl text-xs font-mono text-[#A3A3A3]">
-              <strong className="text-white font-bold">{initialProjects.length} Published</strong> Projects
+              <strong className="text-white font-bold">{projects.length} Published</strong> Projects
             </div>
             <Link
               href="/contact"

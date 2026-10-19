@@ -17,7 +17,12 @@ export async function generateStaticParams() {
   try {
     const projects = await getPublishedProjects();
     if (!projects || projects.length === 0) {
-      return [{ slug: "1" }];
+      return [
+        { slug: "1" },
+        { slug: "login-page" },
+        { slug: "2" },
+        { slug: "basketball-upload" },
+      ];
     }
     const paramsList: { slug: string }[] = [];
     for (const p of projects) {
@@ -28,7 +33,12 @@ export async function generateStaticParams() {
     }
     return paramsList;
   } catch {
-    return [{ slug: "1" }];
+    return [
+      { slug: "1" },
+      { slug: "login-page" },
+      { slug: "2" },
+      { slug: "basketball-upload" },
+    ];
   }
 }
 

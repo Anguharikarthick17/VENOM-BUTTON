@@ -2,7 +2,7 @@ import { revalidatePath } from "next/cache";
 import { createAdminClient } from "./supabase/admin";
 import { createPublicServerClient } from "./supabase/server";
 import { isSupabaseConfigured } from "./supabase/auth";
-import { FreeCodeResource, isValidGitHubUrl } from "@/data/freeCodeResources";
+import { FreeCodeResource, FREE_CODE_RESOURCES, isValidGitHubUrl } from "@/data/freeCodeResources";
 
 export interface FreeCodeProjectRow {
   id: string;
@@ -194,22 +194,30 @@ function invalidateProjectCache(slug?: string, reelNumber?: number) {
 }
 
 /**
+ * Returns the canonical static published projects catalog (#1 and #2)
+ * Used as a dependable baseline so the public vault never renders an empty state
+ * when Supabase is connecting, unconfigured, or returns no published rows.
+ */
+export function getStaticPublishedProjects(): FreeCodeResource[] {
+  if (FREE_CODE_RESOURCES && FREE_CODE_RESOURCES.length > 0) {
+    return FREE_CODE_RESOURCES.filter((p) => p.status === "published" || !p.status);
+  }
+  return SEED_PROJECTS.filter((p) => p.status === "published").map(adaptRowToResource);
+}
+
+/**
  * Retrieves all published projects for public display.
- * Strictly filters out drafts. Never exposes unpublished projects publicly.
+ * Strictly filters out drafts. Falls back gracefully to static catalogue
+ * if Supabase database is unavailable or returns 0 records.
  */
 export async function getPublishedProjects(): Promise<FreeCodeResource[]> {
+  const fallback = getStaticPublishedProjects();
+
   if (!isSupabaseConfigured()) {
-    const isProd = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
-    if (isProd) {
-      console.error(
-        "[FreeCodeDB] Supabase database credentials missing in production environment."
-      );
-      return [];
-    }
     console.warn(
-      "[FreeCodeDB] Supabase not configured in local environment. Using initial seed catalogue (#1 and #2)."
+      "[FreeCodeDB] Supabase database credentials missing. Serving static catalogue (#1 and #2)."
     );
-    return SEED_PROJECTS.filter((p) => p.status === "published").map(adaptRowToResource);
+    return fallback;
   }
 
   try {
@@ -222,32 +230,30 @@ export async function getPublishedProjects(): Promise<FreeCodeResource[]> {
       .order("reel_number", { ascending: false });
 
     if (error) {
-      console.error("[FreeCodeDB] Failed to query published projects:", error.message);
-      const isProd = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
-      if (isProd) {
-        throw new Error(`Database query error: ${error.message}`);
-      }
-      return SEED_PROJECTS.filter((p) => p.status === "published").map(adaptRowToResource);
+      console.warn(
+        "[FreeCodeDB] Database query error for published projects. Using static fallback:",
+        error.message
+      );
+      return fallback;
     }
 
     if (!data || data.length === 0) {
-      return [];
+      console.warn(
+        "[FreeCodeDB] Database returned 0 published projects. Using static fallback (#1 and #2)."
+      );
+      return fallback;
     }
 
     return (data as FreeCodeProjectRow[]).map(adaptRowToResource);
   } catch (err) {
-    const isProd = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
-    console.error("[FreeCodeDB] getPublishedProjects caught error:", err);
-    if (isProd) {
-      return [];
-    }
-    return SEED_PROJECTS.filter((p) => p.status === "published").map(adaptRowToResource);
+    console.warn("[FreeCodeDB] getPublishedProjects caught error, using static fallback:", err);
+    return fallback;
   }
 }
 
 /**
  * Retrieves a single published project by its slug or reel number.
- * Returns null if the project does not exist or is currently in draft status.
+ * Returns static fallback project if Supabase is unavailable or returns no match.
  */
 export async function getPublishedProjectBySlugOrReel(
   identifier: string
@@ -256,15 +262,23 @@ export async function getPublishedProjectBySlugOrReel(
   const cleanId = decoded.toLowerCase().replace(/^reel-?/, "").replace(/^#/, "").trim();
   const intVal = /^\d+$/.test(cleanId) ? parseInt(cleanId, 10) : null;
 
-  if (!isSupabaseConfigured()) {
-    const found = SEED_PROJECTS.find(
-      (p) =>
-        p.status === "published" &&
+  const findInStatic = (): FreeCodeResource | null => {
+    const staticList = getStaticPublishedProjects();
+    const found = staticList.find((p) => {
+      const pClean = p.reelNumber.replace(/^#/, "").trim();
+      const pInt = parseInt(pClean, 10);
+      const isSlug =
+        p.slug &&
         (p.slug.toLowerCase() === decoded.toLowerCase() ||
-          p.slug.toLowerCase() === cleanId ||
-          (intVal !== null && p.reel_number === intVal))
-    );
-    return found ? adaptRowToResource(found) : null;
+          p.slug.toLowerCase() === cleanId);
+      const isReel = pClean === cleanId || (intVal !== null && pInt === intVal);
+      return Boolean(isSlug || isReel);
+    });
+    return found || null;
+  };
+
+  if (!isSupabaseConfigured()) {
+    return findInStatic();
   }
 
   try {
@@ -283,15 +297,21 @@ export async function getPublishedProjectBySlugOrReel(
     const { data, error } = await query.limit(1).maybeSingle();
 
     if (error) {
-      console.error("[FreeCodeDB] Failed to retrieve project:", error.message);
-      return null;
+      console.warn(
+        "[FreeCodeDB] Failed to retrieve project from database, falling back to static:",
+        error.message
+      );
+      return findInStatic();
     }
 
-    if (!data) return null;
+    if (!data) {
+      return findInStatic();
+    }
+
     return adaptRowToResource(data as FreeCodeProjectRow);
   } catch (err) {
-    console.error("[FreeCodeDB] getPublishedProjectBySlugOrReel error:", err);
-    return null;
+    console.warn("[FreeCodeDB] getPublishedProjectBySlugOrReel error, falling back to static:", err);
+    return findInStatic();
   }
 }
 
