@@ -5,6 +5,7 @@ import { Marquee } from "@/components/Marquee";
 import { Services } from "@/components/Services";
 import { BrandPhilosophy } from "@/components/BrandPhilosophy";
 import { Process } from "@/components/Process";
+import { CrossingMarquee } from "@/components/CrossingMarquee";
 import { FreeCodeSection } from "@/components/FreeCodeSection";
 import { getPublishedProjects } from "@/lib/freeCodeDb";
 import { ShiningButton } from "@/components/ui/ShiningButton";
@@ -91,8 +92,11 @@ export default async function Home() {
         <Process />
       </ErrorBoundary>
 
+      {/* Cinematic Crossing Marquee Feature */}
+      <CrossingMarquee />
+
       {/* 6. Built with Security in Mind: 4 Feature Blocks */}
-      <section className="py-16 sm:py-24 lg:py-32 bg-[#050505] border-t border-[#303030] relative text-white">
+      <section className="py-16 sm:py-24 lg:py-32 bg-[#050505] relative text-white">
         <div className="relative w-full max-w-[1680px] mx-auto px-4 sm:px-10 lg:px-16 2xl:px-24 space-y-10 sm:space-y-12">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 pb-10 border-b border-[#303030]">
             <div>
