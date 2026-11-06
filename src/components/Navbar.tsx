@@ -39,12 +39,12 @@ export function Navbar() {
     }
   }, [mobileMenuOpen]);
 
-  // Close mobile drawer on route transition
-  const [prevPathname, setPrevPathname] = React.useState(pathname);
-  if (prevPathname !== pathname) {
-    setPrevPathname(pathname);
-    setMobileMenuOpen(false);
-  }
+  // Close mobile drawer on browser navigation events
+  React.useEffect(() => {
+    const handlePopState = () => setMobileMenuOpen(false);
+    window.addEventListener("popstate", handlePopState);
+    return () => window.removeEventListener("popstate", handlePopState);
+  }, []);
 
   // Suppress public navigation on dedicated admin routes
   if (pathname?.startsWith("/admin")) {
@@ -52,6 +52,7 @@ export function Navbar() {
   }
 
   const isActive = (href: string) => {
+    if (!pathname) return false;
     if (href === "/") return pathname === "/";
     return pathname.startsWith(href);
   };

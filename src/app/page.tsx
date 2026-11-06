@@ -7,6 +7,7 @@ import { BrandPhilosophy } from "@/components/BrandPhilosophy";
 import { Process } from "@/components/Process";
 import { CrossingMarquee } from "@/components/CrossingMarquee";
 import { FreeCodeSection } from "@/components/FreeCodeSection";
+import { CommunityHomeSection } from "@/components/community/CommunityHomeSection";
 import { getPublishedProjects } from "@/lib/freeCodeDb";
 import { ShiningButton } from "@/components/ui/ShiningButton";
 import { SECURITY_PILLARS } from "@/data/services";
@@ -178,7 +179,10 @@ export default async function Home() {
         <FreeCodeSection resources={publishedProjects} />
       </ErrorBoundary>
 
-      {/* 8. Official GENZLOG Direct Contact & Commission Desk */}
+      {/* 8. GENZLOG Community Identity Card Showcase */}
+      <CommunityHomeSection />
+
+      {/* 9. Official GENZLOG Direct Contact & Commission Desk */}
       <section id="contact" className="py-16 sm:py-24 lg:py-32 bg-[#050505] border-t border-[#303030] relative overflow-hidden text-white">
         <div className="relative w-full max-w-[1680px] mx-auto px-4 sm:px-10 lg:px-16 2xl:px-24">
           <div className="bg-[#0B0B0B] border border-[#303030] rounded-2xl sm:rounded-3xl p-6 sm:p-12 lg:p-16 relative overflow-hidden">

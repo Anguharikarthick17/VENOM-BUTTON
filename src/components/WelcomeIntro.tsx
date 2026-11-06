@@ -140,14 +140,19 @@ export function WelcomeIntro() {
     finishIntro();
   }, [finishIntro]);
 
-  // If user navigates away to another route, mark completed so it never replays on internal navigation
+  // If user navigates away to another route, ensure intro classes and locks are completely cleared
   useEffect(() => {
-    if (pathname !== "/" && !hasIntroRunForDocument) {
+    if (pathname !== "/") {
       hasIntroRunForDocument = true;
       if (typeof window !== "undefined") {
         (
           window as unknown as { __GENZLOG_FULL_HOME_LOAD__?: boolean }
         ).__GENZLOG_FULL_HOME_LOAD__ = false;
+      }
+      if (typeof document !== "undefined") {
+        document.documentElement.classList.remove("welcome-active");
+        document.documentElement.classList.remove("welcome-revealing");
+        document.body.style.overflow = "";
       }
     }
   }, [pathname]);

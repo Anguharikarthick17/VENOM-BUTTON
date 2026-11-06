@@ -789,7 +789,38 @@ footer {
   .animate-wave-2,
   .animate-wave-3,
   .animate-wave-4,
-  .animate-wave-5 {
+  .animate-wave-5,
+  .animate-lanyard-sway {
     animation: none !important;
   }
 }
+
+/* ==============================================================================
+   GENZLOG COMMUNITY CARD ANIMATIONS
+   ============================================================================== */
+
+@keyframes lanyard-sway {
+  0% {
+    transform: rotate(-1.5deg);
+  }
+  100% {
+    transform: rotate(1.5deg);
+  }
+}
+
+.animate-lanyard-sway {
+  animation: lanyard-sway 4.5s ease-in-out infinite alternate;
+  transform-origin: top center;
+}
+
+@keyframes waveform-idle {
+  0% {
+    transform: scaleY(0.4);
+    opacity: 0.4;
+  }
+  100% {
+    transform: scaleY(1);
+    opacity: 0.95;
+  }
+}
+

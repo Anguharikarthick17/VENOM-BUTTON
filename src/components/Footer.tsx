@@ -29,12 +29,10 @@ export function Footer() {
   ];
 
   const resourceLinks = [
-    { label: "Animated Login Page", href: "/free-code/animated-login-page" },
-    { label: "Glassmorphism Navbar", href: "/free-code/modern-navbar" },
-    { label: "SaaS Pricing Cards", href: "/free-code/pricing-cards" },
-    { label: "Validated Contact Form", href: "/free-code/interactive-contact-form" },
-    { label: "Creative Button Pack", href: "/free-code/creative-button-pack" },
-    { label: "Editorial Hero Section", href: "/free-code/minimal-portfolio-hero" },
+    { label: "GENZLOG Login Page (#1)", href: "/free-code/1" },
+    { label: "Basketball 3D Upload (#2)", href: "/free-code/2" },
+    { label: "Explore All Free Code", href: "/free-code" },
+    { label: "GENZLOG Community Card", href: "/community" },
   ];
 
   return (

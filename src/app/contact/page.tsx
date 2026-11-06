@@ -1,6 +1,7 @@
 import React, { Suspense } from "react";
 import { Metadata } from "next";
 import { ContactSection } from "@/components/ContactSection";
+import { CommunityContactSection } from "@/components/community/CommunityContactSection";
 import { LoadingState } from "@/components/states/LoadingState";
 import { ErrorBoundary } from "@/components/states/ErrorBoundary";
 
@@ -27,6 +28,9 @@ export default function ContactPage() {
           <ContactSection />
         </Suspense>
       </ErrorBoundary>
+
+      {/* GENZLOG Community Member Pass Promotional Feature */}
+      <CommunityContactSection />
     </main>
   );
 }
