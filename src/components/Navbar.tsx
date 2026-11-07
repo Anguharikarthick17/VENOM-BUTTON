@@ -15,6 +15,7 @@ const NAV_LINKS = [
 ];
 
 import { SOCIAL_LINKS } from "@/data/socialLinks";
+import { GeminiStudentOffer } from "@/components/GeminiStudentOffer";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -59,7 +60,7 @@ export function Navbar() {
 
   return (
     <>
-      <header className="w-full bg-[#050505] relative z-30 h-[64px] sm:h-[70px] select-none">
+      <header className="w-full bg-[#050505] relative z-30 h-[72px] sm:h-[80px] select-none">
         <div className="w-full max-w-[1680px] mx-auto px-4 sm:px-8 lg:pl-20 2xl:pl-28 lg:pr-16 2xl:pr-24 h-full flex items-center">
           {/* Left: Prominent Official Brand Logo */}
           <Link
@@ -104,40 +105,46 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Far Right: Social Media Icons Row pushed with ml-auto */}
-          <div className="hidden lg:flex items-center ml-auto gap-4 text-white/80">
-            {SOCIAL_LINKS.map((item) => {
-              if (item.href) {
+          {/* Far Right: Social Media Icons Row + Underneath: Get Gemini 1 Year Free Offer */}
+          <div className="hidden lg:flex flex-col items-end ml-auto justify-center gap-1.5">
+            <div className="flex items-center gap-4 text-white/80">
+              {SOCIAL_LINKS.map((item) => {
+                if (item.href) {
+                  return (
+                    <a
+                      key={item.name}
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`GENZLOG on ${item.name}`}
+                      className="text-white/80 hover:text-white transition-colors p-1 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] rounded-sm"
+                    >
+                      {item.svg}
+                    </a>
+                  );
+                }
                 return (
-                  <a
+                  <button
                     key={item.name}
-                    href={item.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`GENZLOG on ${item.name}`}
-                    className="text-white/80 hover:text-white transition-colors p-1.5 outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#050505] rounded-sm"
+                    type="button"
+                    disabled
+                    aria-label={`GENZLOG on ${item.name} (Coming Soon)`}
+                    title={`GENZLOG on ${item.name} (Link to be configured)`}
+                    className="text-white/80 hover:text-white transition-colors p-1 opacity-80 cursor-default outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60 rounded-sm"
                   >
                     {item.svg}
-                  </a>
+                  </button>
                 );
-              }
-              return (
-                <button
-                  key={item.name}
-                  type="button"
-                  disabled
-                  aria-label={`GENZLOG on ${item.name} (Coming Soon)`}
-                  title={`GENZLOG on ${item.name} (Link to be configured)`}
-                  className="text-white/80 hover:text-white transition-colors p-1.5 opacity-80 cursor-default outline-none focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-white/60 rounded-sm"
-                >
-                  {item.svg}
-                </button>
-              );
-            })}
+              })}
+            </div>
+
+            {/* Glowing Note Under Media Links */}
+            <GeminiStudentOffer />
           </div>
 
-          {/* Mobile Hamburger Toggle */}
-          <div className="flex items-center gap-3 lg:hidden ml-auto">
+          {/* Mobile Right: Gemini Student Offer + Hamburger Toggle */}
+          <div className="flex items-center gap-2.5 lg:hidden ml-auto">
+            <GeminiStudentOffer />
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="min-h-[44px] min-w-[44px] flex items-center justify-center p-2 text-[#FFFFFF] hover:text-[#A3A3A3] transition-colors outline-none focus:outline-none focus-visible:ring-2 focus-visible:ring-white/60 rounded-md cursor-pointer"
@@ -218,6 +225,11 @@ export function Navbar() {
           </div>
 
           <div className="flex flex-col gap-4 pt-6 border-t border-[#303030]">
+            {/* Gemini Student Benefit on Mobile Drawer */}
+            <div className="flex justify-center py-1">
+              <GeminiStudentOffer />
+            </div>
+
             {/* Social Icons on Mobile Drawer */}
             <div className="flex items-center justify-center gap-6 text-white py-2">
               {SOCIAL_LINKS.map((item) => {
