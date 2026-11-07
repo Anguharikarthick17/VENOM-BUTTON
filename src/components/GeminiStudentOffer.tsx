@@ -39,7 +39,6 @@ export function GeminiStudentOffer() {
         setTimeout(() => setCopied(false), 2200);
       }
     } catch {
-      // Fallback
       setCopied(true);
       setTimeout(() => setCopied(false), 2200);
     }
@@ -47,69 +46,57 @@ export function GeminiStudentOffer() {
 
   return (
     <>
-      {/* GLOWING TRIGGER BUTTON: Positioned right under the media links on the right */}
-      <div className="relative">
-        <button
-          type="button"
-          onClick={() => setIsOpen(true)}
-          className="group relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#0D0D0E]/95 hover:bg-[#151518] border border-cyan-400/50 hover:border-cyan-300 text-xs font-mono font-medium text-white transition-all duration-300 cursor-pointer shadow-[0_0_14px_rgba(34,211,238,0.35),0_0_28px_rgba(168,85,247,0.2)] hover:shadow-[0_0_22px_rgba(34,211,238,0.6),0_0_36px_rgba(168,85,247,0.4)] animate-gemini-glow outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
-          aria-label="Get Google Gemini 1 Year Free - Student Benefit"
-          title="Click to view step-by-step claim instructions"
-        >
-          {/* Animated Sparkle Icon with Gradient */}
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-gradient-to-r from-cyan-400 to-purple-400" />
-          </span>
+      {/* MONOCHROME GLOWING TRIGGER NOTE */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(true)}
+        className="group relative inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#111111]/95 hover:bg-[#1A1A1A] border border-white/40 hover:border-white text-xs font-mono font-medium text-white transition-all duration-300 cursor-pointer shadow-[0_0_12px_rgba(255,255,255,0.2)] hover:shadow-[0_0_20px_rgba(255,255,255,0.45)] animate-gemini-glow outline-none focus-visible:ring-2 focus-visible:ring-white"
+        aria-label="Get Google Gemini 1 Year Free - Student Benefit"
+        title="Click to view step-by-step claim instructions"
+      >
+        {/* Animated Pure White Sparkle Indicator */}
+        <span className="relative flex h-2 w-2">
+          <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-70" />
+          <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+        </span>
 
-          <Sparkles className="w-3.5 h-3.5 text-cyan-300 group-hover:rotate-12 transition-transform duration-300" />
+        <Sparkles className="w-3.5 h-3.5 text-white group-hover:rotate-12 transition-transform duration-300" />
 
-          <span className="bg-gradient-to-r from-white via-cyan-100 to-purple-200 bg-clip-text text-transparent font-semibold tracking-tight">
-            Get Gemini 1 Year Free
-          </span>
+        <span className="text-white font-medium tracking-tight">
+          Get Gemini 1 Year Free
+        </span>
 
-          <span className="text-[10px] text-cyan-300/80 group-hover:text-cyan-200 transition-colors">
-            ↗
-          </span>
-        </button>
-      </div>
+        <span className="text-[11px] text-[#A3A3A3] group-hover:text-white transition-colors">
+          ↗
+        </span>
+      </button>
 
-      {/* INTERACTIVE MODAL: Opens right on the page showing the steps */}
+      {/* MONOCHROME INTERACTIVE CLAIM MODAL */}
       {isOpen && (
         <div
           role="dialog"
           aria-modal="true"
           aria-labelledby="gemini-modal-title"
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/80 backdrop-blur-md animate-in fade-in duration-200"
           onClick={(e) => {
             if (e.target === e.currentTarget) setIsOpen(false);
           }}
         >
           <div
             ref={modalRef}
-            className="relative w-full max-w-lg bg-[#0A0A0C] border border-[#2A2A32] rounded-2xl p-6 sm:p-7 shadow-[0_0_50px_rgba(34,211,238,0.2),0_10px_30px_rgba(0,0,0,0.8)] text-white overflow-hidden animate-in zoom-in-95 duration-200"
+            className="relative w-full max-w-lg bg-[#0A0A0A] border border-[#303030] rounded-2xl p-6 sm:p-8 shadow-[0_0_40px_rgba(255,255,255,0.1),0_15px_40px_rgba(0,0,0,0.9)] text-white overflow-hidden animate-in zoom-in-95 duration-200"
           >
-            {/* Subtle Gradient Backlight */}
-            <div
-              aria-hidden="true"
-              className="absolute -top-24 -right-24 w-60 h-60 bg-gradient-to-br from-cyan-500/20 to-purple-600/20 rounded-full blur-3xl pointer-events-none"
-            />
-            <div
-              aria-hidden="true"
-              className="absolute -bottom-24 -left-24 w-60 h-60 bg-gradient-to-tr from-purple-600/15 to-cyan-500/15 rounded-full blur-3xl pointer-events-none"
-            />
-
-            {/* Top Bar: Category Badge & Close Button */}
-            <div className="relative flex items-center justify-between pb-4 border-b border-[#222228]">
-              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-cyan-950/60 border border-cyan-500/40 text-[11px] font-mono text-cyan-300 font-medium">
-                <GraduationCap className="w-3.5 h-3.5 text-cyan-400" />
+            {/* Top Bar: Monochrome Category Badge & Close Button */}
+            <div className="relative flex items-center justify-between pb-4 border-b border-[#222222]">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#161616] border border-[#333333] text-[11px] font-mono text-[#CCCCCC] font-medium uppercase tracking-wider">
+                <GraduationCap className="w-3.5 h-3.5 text-white" />
                 <span>STUDENT BENEFIT</span>
               </div>
 
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="p-1.5 rounded-lg text-neutral-400 hover:text-white hover:bg-white/10 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-cyan-400"
+                className="p-1.5 rounded-lg text-[#A3A3A3] hover:text-white hover:bg-[#1A1A1A] transition-colors outline-none focus-visible:ring-2 focus-visible:ring-white"
                 aria-label="Close dialog"
               >
                 <X className="w-5 h-5" />
@@ -117,9 +104,9 @@ export function GeminiStudentOffer() {
             </div>
 
             {/* Title Section */}
-            <div className="relative pt-4 pb-3">
-              <div className="flex items-center gap-2 mb-1">
-                <Sparkles className="w-4 h-4 text-cyan-400 shrink-0" />
+            <div className="relative pt-5 pb-3">
+              <div className="flex items-center gap-2 mb-1.5">
+                <Sparkles className="w-4 h-4 text-white shrink-0" />
                 <h3
                   id="gemini-modal-title"
                   className="text-xl sm:text-2xl font-bold font-display uppercase tracking-tight text-white"
@@ -127,15 +114,15 @@ export function GeminiStudentOffer() {
                   Get Gemini 1 Year Free
                 </h3>
               </div>
-              <p className="text-xs sm:text-sm text-neutral-400">
-                Official Google Gemini for Students offer. Follow the verified steps below to claim your access.
+              <p className="text-xs sm:text-sm text-[#A3A3A3] leading-relaxed">
+                Official Google Gemini for Students offer. Follow the verified steps below to claim your complimentary 1-year access.
               </p>
             </div>
 
             {/* Note Box with Claim Steps */}
-            <div className="relative my-4 p-4 sm:p-5 rounded-xl bg-[#121216] border border-[#262630] space-y-3">
-              <div className="flex items-center justify-between pb-2 border-b border-[#22222A]">
-                <span className="text-xs font-mono font-bold text-cyan-300 tracking-wider flex items-center gap-1.5">
+            <div className="relative my-4 p-4 sm:p-5 rounded-xl bg-[#111111] border border-[#262626] space-y-3">
+              <div className="flex items-center justify-between pb-2 border-b border-[#222222]">
+                <span className="text-xs font-mono font-bold text-white tracking-wider flex items-center gap-1.5">
                   <span>👇</span>
                   <span>HOW TO CLAIM IT:</span>
                 </span>
@@ -143,13 +130,13 @@ export function GeminiStudentOffer() {
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="inline-flex items-center gap-1.5 text-[11px] font-mono text-neutral-400 hover:text-cyan-300 transition-colors cursor-pointer"
+                  className="inline-flex items-center gap-1.5 text-[11px] font-mono text-[#A3A3A3] hover:text-white transition-colors cursor-pointer"
                   title="Copy steps to clipboard"
                 >
                   {copied ? (
                     <>
-                      <Check className="w-3.5 h-3.5 text-green-400" />
-                      <span className="text-green-400 font-semibold">Copied!</span>
+                      <Check className="w-3.5 h-3.5 text-white" />
+                      <span className="text-white font-semibold">Copied!</span>
                     </>
                   ) : (
                     <>
@@ -161,7 +148,7 @@ export function GeminiStudentOffer() {
               </div>
 
               {/* Numbered Steps */}
-              <ol className="space-y-2.5 text-xs sm:text-sm text-neutral-200 leading-relaxed font-sans">
+              <ol className="space-y-2.5 text-xs sm:text-sm text-[#E5E5E5] leading-relaxed font-sans">
                 <li className="flex items-start gap-2.5">
                   <span className="shrink-0 text-base leading-none">1️⃣</span>
                   <span>
@@ -170,10 +157,10 @@ export function GeminiStudentOffer() {
                       href="https://gemini.google/students/"
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-cyan-400 hover:text-cyan-300 underline underline-offset-2 font-mono font-semibold break-all inline-flex items-center gap-1"
+                      className="text-white hover:text-[#CCCCCC] underline underline-offset-4 font-mono font-semibold break-all inline-flex items-center gap-1"
                     >
                       <span>https://gemini.google/students/</span>
-                      <ExternalLink className="w-3 h-3 shrink-0" />
+                      <ExternalLink className="w-3 h-3 shrink-0 text-[#A3A3A3]" />
                     </a>
                   </span>
                 </li>
@@ -185,7 +172,7 @@ export function GeminiStudentOffer() {
 
                 <li className="flex items-start gap-2.5">
                   <span className="shrink-0 text-base leading-none">3️⃣</span>
-                  <span>Click <strong>Claim Student Plan</strong>.</span>
+                  <span>Click <strong className="text-white font-semibold">Claim Student Plan</strong>.</span>
                 </li>
 
                 <li className="flex items-start gap-2.5">
@@ -211,16 +198,16 @@ export function GeminiStudentOffer() {
                 href="https://gemini.google/students/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-cyan-400 to-blue-500 hover:from-cyan-300 hover:to-blue-400 text-black font-semibold text-xs uppercase tracking-wider transition-all duration-200 shadow-[0_0_18px_rgba(34,211,238,0.4)]"
+                className="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl bg-white hover:bg-[#EAEAEA] text-[#050505] font-semibold text-xs uppercase tracking-wider transition-all duration-200 shadow-[0_0_15px_rgba(255,255,255,0.2)] font-mono"
               >
                 <span>Open Gemini for Students</span>
-                <ExternalLink className="w-3.5 h-3.5" />
+                <ExternalLink className="w-3.5 h-3.5 text-[#050505]" />
               </a>
 
               <button
                 type="button"
                 onClick={() => setIsOpen(false)}
-                className="px-4 py-2.5 rounded-xl bg-[#18181D] hover:bg-[#202026] text-neutral-300 hover:text-white border border-[#2D2D38] text-xs font-mono transition-colors text-center"
+                className="px-4 py-2.5 rounded-xl bg-[#161616] hover:bg-[#202020] text-[#A3A3A3] hover:text-white border border-[#2D2D2D] text-xs font-mono transition-colors text-center"
               >
                 Close
               </button>
