@@ -1,43 +1,19 @@
-# GenZLog
+# VENOM-BUTTON
 
-> The Digital Log of Gen Z — Modern Web Development & Numbered Free Code Vault
+An interactive WebGL2 liquid symbiote button inspired by Venom / Anti-Venom. Features procedural raymarched Signed Distance Fields (SDF), Verlet integration physics tendrils that stretch and snap toward the pointer, real-time specular chrome sheen sweeps, and an embedded Web Audio procedural sound synthesizer.
 
-GENZLOG builds websites and digital experiences for businesses across 12 digital service categories, while sharing useful frontend code and open-source resources for developers and creators.
+Designed and developed for [GENZLOG](https://genzlog.tech).
 
 ## Features
+- **Raymarched 3D Signed Distance Fields:** Full-screen GLSL fragment shader computing organic curvature, surface tension bevels, and liquid metaball blending live on the GPU.
+- **Verlet Integration Physics:** Autonomous multi-jointed strands running a 60 FPS Verlet physics simulation stretching toward cursor coordinates.
+- **Dynamic Specular Sheen:** Multi-angle lighting pass with Fresnel rim reflections and continuous beam sweep.
+- **Procedural Web Audio Engine:** Zero audio files; built-in dual-oscillator FM synthesizer calculates tactile liquid squelches and sub-bass rumbles in real time.
+- **Zero External Dependencies:** Self-contained in a single `index.html` file with vanilla WebGL2 and embedded font data.
 
-- **12 Curated Service Categories:** From personal celebration pages to advanced web apps, e-commerce, and live tracking systems.
-- **Custom Solutions Engine:** Tailored AI solutions, customized authentication UI, and bespoke web apps with integrated contact prefill.
-- **Numbered Free Code Vault:** Instagram Reel source code archive indexed by permanent Reel numbers (e.g. `REEL #047`) linking to verified GitHub repositories.
-- **Space Warp Dark Aesthetic:** Monochrome dark identity (`#050505`) with controlled neon typography accents.
-- **Project Brief & Estimation Generator:** In-browser PDF generation and WhatsApp enquiry handoff.
-
-## Tech Stack
-
-- **Framework:** Next.js 16 (Turbopack, App Router)
-- **UI & Styling:** React 19, Tailwind CSS, Vanilla CSS design tokens
-- **Animations:** Framer Motion, Canvas 3D Space Warp
-- **Utilities:** jsPDF, Lucide React
-
-## Getting Started
-
-First, install dependencies and run the development server:
-
+## Quick Start
+Run any local static HTTP server:
 ```bash
-npm install
-npm run dev
+python3 -m http.server 3005
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to explore the website.
-
-## Official Social Channels
-
-- **Instagram:** [https://www.instagram.com/genzlog.in/?hl=en](https://www.instagram.com/genzlog.in/?hl=en)
-- **YouTube:** [https://www.youtube.com/@genzlog17](https://www.youtube.com/@genzlog17)
-- **LinkedIn:** [https://www.linkedin.com/in/angu-hari-karthick-m-175753374/](https://www.linkedin.com/in/angu-hari-karthick-m-175753374/)
-- **X (Twitter):** [https://x.com/home](https://x.com/home)
-- **Facebook:** [https://www.facebook.com/](https://www.facebook.com/)
-
----
-
-© 2026 GENZLOG. All rights reserved.
+Then open `http://localhost:3005` in your browser.
